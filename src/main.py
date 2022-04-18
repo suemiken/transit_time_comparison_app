@@ -48,6 +48,7 @@ class RootWidget(TabbedPanel):
             
         #待機画面→計測中
         elif not(self.now_measurement):
+            self.now_state = 'Two-step verification Waiting'
             self.start_timer()
             self.now_state = 'We are taking measurements now'
             self.control = 'Stop'
@@ -58,21 +59,24 @@ class RootWidget(TabbedPanel):
         m, s = divmod(td.seconds, 60)
         h, m = divmod(m, 60)
         self.time = '{0:02}:{1:02}:{2:02}'.format(h, m, s)
+
         
     def start_timer(self):
         self.now_measurement = True
         self.start = time.time()
         Clock.schedule_interval(self.on_count, 1.0)
+        Clock.schedule_interval(self.get_location_now, 10)
         pass
     
     def stop_timer(self):
         self.now_measurement = False
         self.store_database()
         Clock.unschedule(self.on_count)
+        Clock.unschedule(self.get_location_now)
         self.time = '00:00:00'
         self.id = self.id + 1
 
-    def get_location_now(self):
+    def get_location_now(self,dt):
         #以下は接続するicloudのアカウントとパスワードを記載します。
         api = PyiCloudService('*******', '*******')
 
@@ -99,7 +103,7 @@ class RootWidget(TabbedPanel):
 
 
         
-        auth = str(get_oauth(api))
+        auth = str(self.get_oauth(api))
         eval_auth = eval(auth)
         lat = eval_auth['latitude']
         lon = eval_auth['longitude']
@@ -116,8 +120,8 @@ class RootWidget(TabbedPanel):
         conn = mydb.connect(
             host='localhost',
             port='3306',
-            user='********',
-            password='******',
+            user='*******',
+            password='********',
             database='test'
         )
 
@@ -125,24 +129,24 @@ class RootWidget(TabbedPanel):
         conn.ping(reconnect=True)
         # DB操作用にカーソルを作成
         cur = conn.cursor()
-        # cur.execute('DROP TABLE test_table')
+        # cur.execute('DROP TABLE test_table4')
         # テーブルの作成
-        # cur.execute(
-        #     """
-        #     CREATE TABLE test_table(
-        #     `id` int auto_increment primary key,
-        #     `time` char(8) not null,
-        #     `date` datetime not null,
-        #     `trajectory` json
-        #     )
-        #     """)
+        cur.execute(
+            """
+            CREATE TABLE test_table4(
+            `id` int auto_increment primary key,
+            `time` char(8) not null,
+            `date` datetime not null,
+            `trajectory` json
+            )
+            """)
         conn.commit()
         
         json_trajectry = json.dumps(self.trajectory)
         self.on_count
         cur.execute(
             """
-            INSERT INTO test_table VALUES (
+            INSERT INTO test_table4 VALUES (
                 %s, 
                 %s,
                 %s,
