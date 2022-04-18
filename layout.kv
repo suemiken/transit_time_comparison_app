@@ -1,0 +1,38 @@
+<RootWidget>
+    do_default_tab: False
+
+    TabbedPanelItem:
+        text: 'Measurement'
+        BoxLayout:
+            orientation: 'vertical'
+            AnchorLayout:
+                anchor_x:'center'
+                anchor_y:'top'
+                Label:
+                    id: time
+                    text:root.now_state
+                    font_size:30
+            AnchorLayout:
+                anchor_x:'center'
+                anchor_y:'center'
+                Label:
+                    text: root.time
+                    markup: True
+                    font_size:30
+            AnchorLayout:
+                anchor_x:'center'
+                anchor_y:'center'
+                Button:
+                    id:now_measurement
+                    text:root.control
+                    size_hint:[0.4, 0.3]
+                    font_size:30
+                    on_press:root.buttonClicked()
+    TabbedPanelItem:
+        text: 'recoding List'
+        Button:
+            text: 'Button'
+
+
+        #         # btn = Button(text='Hello World')
+        #         # layout.add_widget(btn)
