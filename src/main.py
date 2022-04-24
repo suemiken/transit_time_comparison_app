@@ -2,6 +2,7 @@ from kivy.app import App
 from kivy.lang import Builder
 from kivy.uix.tabbedpanel import TabbedPanel
 from kivy.uix.button import Button
+from kivy.uix.label import Label
 from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.uix.screenmanager import NoTransition, FadeTransition
 import time
@@ -13,11 +14,71 @@ import datetime
 import json
 from pyicloud import PyiCloudService
 import sys
+import matplotlib.pyplot as plt
+import numpy as np
+from kivy.uix.stacklayout import StackLayout
 # Create both screens. Please note the root.manager.current: this is how
 # you can control the ScreenMansager from kv. Each screen has by default a
 # property manager that gives you the instance of the ScreenManager used.
 from kivy.properties import StringProperty, NumericProperty, BooleanProperty
 Builder.load_file('./layout.kv')
+
+
+class CustomStackLayout(StackLayout):
+    def __init__(self, **kwargs):
+        super(CustomStackLayout, self).__init__(**kwargs)
+        self.get_database()
+        self.display_setting()
+
+    def display_setting(self):
+
+        lab = Label(text=str('id'), width=40, size_hint=(0.1, None))
+        self.add_widget(lab)
+        lab = Label(text=str('date'), width=40, size_hint=(0.3, None))
+        self.add_widget(lab)
+        lab = Label(text=str('time'), width=40, size_hint=(0.3, None))
+        self.add_widget(lab)
+        lab = Label(text=str('distance'), width=40, size_hint=(0.3, None))#+str(self.info[id]['time'])), width=40, size_hint=(0.3, None))
+        self.add_widget(lab)
+
+        for id in self.info.keys():
+            lab = Label(text=str(id), width=40, size_hint=(0.1, None))
+            self.add_widget(lab)
+            lab = Label(text=str(self.info[id]['date']), width=40, size_hint=(0.3, None))
+            self.add_widget(lab)
+            lab = Label(text=str(self.info[id]['time']), width=40, size_hint=(0.3, None))
+            self.add_widget(lab)
+            lab = Label(text=str('distance:'), width=40, size_hint=(0.3, None))#+str(self.info[id]['time'])), width=40, size_hint=(0.3, None))
+            self.add_widget(lab)
+
+        # date, time, 距離を表示させたい
+
+    def get_database(self):
+        # コネクションの作成
+        conn = mydb.connect(
+            host='localhost',
+            port='3306',
+            user='****',
+            password='***',
+            database='test'
+        )
+
+        # コネクションが切れた時に再接続してくれるよう設定
+        conn.ping(reconnect=True)
+        # DB操作用にカーソルを作成
+        cur = conn.cursor()
+        # テーブルの作成
+        cur.execute(
+            """
+            select * from test_table3
+            """
+        )
+        self.info = {}
+        for (id, time, date, jsonf) in cur:
+            self.info[id] = {'time':time, 'date':date, 'trajectory':json.loads(jsonf)}
+            
+        conn.commit()
+        conn.close()
 
 
 
