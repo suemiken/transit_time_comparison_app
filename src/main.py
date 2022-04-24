@@ -6,6 +6,7 @@ from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.uix.screenmanager import NoTransition, FadeTransition
 import time
 import datetime
+import threading
 from kivy.clock import Clock
 import mysql.connector as mydb
 import datetime
@@ -77,6 +78,11 @@ class RootWidget(TabbedPanel):
         self.id = self.id + 1
 
     def get_location_now(self,dt):
+
+        thread = threading.Thread(target=self.process)
+        thread.start()
+
+    def process(self):
         #以下は接続するicloudのアカウントとパスワードを記載します。
         api = PyiCloudService('*******', '*******')
 
