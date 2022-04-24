@@ -3,13 +3,14 @@ import datetime
 import json
 import matplotlib.pyplot as plt
 import numpy as np
+import pickle
 
  # コネクションの作成
 conn = mydb.connect(
     host='localhost',
     port='3306',
-    user='*******',
-    password='******',
+    user='****',
+    password='***',
     database='test'
 )
 
@@ -35,6 +36,12 @@ print(len(lat))
 plt.scatter(lat, lon)
 plt.show()
 
+f = open('lat.binaryfile', 'wb')
+pickle.dump(lat, f)
+f.close
+f = open('lon.binaryfile', 'wb')
+pickle.dump(lon, f)
+f.close
 # print(cur)
             # `id` int auto_increment primary key,
             # `time` char(8) not null,
