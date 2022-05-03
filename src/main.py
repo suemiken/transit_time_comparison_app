@@ -67,13 +67,6 @@ def get_database():
 
     return info
 
-class SettingLatLon(BoxLayout):
-    def __init__(self, **kwargs):
-        super(SettingLatLon, self).__init__(**kwargs)
-
-
-    
-
 class MapViewLayout(MapView):
     def __init__(self, **kwargs):
         super(MapViewLayout, self).__init__(**kwargs)
@@ -87,7 +80,6 @@ class AutoMeasureLayout(TabbedPanel):
     measure_time = StringProperty()
     now_measurement = BooleanProperty()
     time = StringProperty()
-    text = StringProperty()
     def __init__(self, **kwargs):
         super(AutoMeasureLayout, self).__init__(**kwargs)
         self.now_state = 'Measurement betwean two point'
@@ -102,7 +94,6 @@ class AutoMeasureLayout(TabbedPanel):
         self.counter = 0
         self.start_location = True
         self.r = R
-        self.text = 'test'
         
         self.trajectory = {
             "latitude":[],
