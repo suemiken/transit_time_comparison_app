@@ -27,10 +27,10 @@ Builder.load_file('./layout.kv')
 from kivy_garden.mapview import MapView, MapMarker
 from kivy.app import App
 
-IC_PASS = '*********'
-IC_USER = '*********'
-DB_PASS = '*********'
-DB_USER = '*********'
+IC_PASS = '********'
+IC_USER = '********'
+DB_PASS = '********'
+DB_USER = '********'
 
 END_TR = [35.681473, 139.757559]
 START_TR = [35.681473, 139.757559]
@@ -67,9 +67,16 @@ def get_database():
 
     return info
 
+class SettingLatLon(BoxLayout):
+    def __init__(self, **kwargs):
+        super(SettingLatLon, self).__init__(**kwargs)
+
+
+    
+
 class MapViewLayout(MapView):
     def __init__(self, **kwargs):
-        super(MapViewLayout, self).__init__()
+        super(MapViewLayout, self).__init__(**kwargs)
         self.info = get_database()
         for id in self.info.keys():
             self.add_marker(MapMarker(lat=self.info[id]['trajectory']['latitude'][0], lon=self.info[id]['trajectory']['longitude'][0]))
@@ -80,6 +87,7 @@ class AutoMeasureLayout(TabbedPanel):
     measure_time = StringProperty()
     now_measurement = BooleanProperty()
     time = StringProperty()
+    text = StringProperty()
     def __init__(self, **kwargs):
         super(AutoMeasureLayout, self).__init__(**kwargs)
         self.now_state = 'Measurement betwean two point'
@@ -94,12 +102,22 @@ class AutoMeasureLayout(TabbedPanel):
         self.counter = 0
         self.start_location = True
         self.r = R
+        self.text = 'test'
         
         self.trajectory = {
             "latitude":[],
             "longitude":[]
             }
         
+    def buttonClicked_start(self):        # ボタンをクリック時
+        list_tr = eval(self.ids.start_tr.text)
+        #これの形式に変更
+        self.start_tr = [list_tr[0], list_tr[1]] 
+        
+    def buttonClicked_end(self):        # ボタンをクリック時
+        list_tr = eval(self.ids.end_tr.text)
+        self.end_tr = [list_tr[0], list_tr[1]]
+
     def buttonClicked(self):        # ボタンをクリック時
         #計測中→待機画面中
         if self.now_measurement:
@@ -143,12 +161,11 @@ class AutoMeasureLayout(TabbedPanel):
 
     def stop_timer(self):
         self.now_measurement = False
-        self.store_database()
         Clock.unschedule(self.on_count)
-        Clock.unschedule(self.get_location)
         self.time = '00:00:00'
         self.id = self.id + 1
     
+
             
     def start_waiting(self):
         self.now_measurement = True
@@ -166,6 +183,13 @@ class AutoMeasureLayout(TabbedPanel):
         Clock.unschedule(self.get_location)
         self.start_location = True
         self.stop_timer()
+        self.store_database()
+        self.trajectory = {
+                "latitude":[],
+                "longitude":[]
+        }
+        self.now_state = 'Measurement betwean two point'
+        self.control = 'Start'
 
     def get_location(self,dt):
         api = PyiCloudService(IC_USER, IC_PASS)

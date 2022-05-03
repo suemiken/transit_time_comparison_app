@@ -29,7 +29,7 @@
     #                 font_size:30
     #                 on_press:root.buttonClicked()
     TabbedPanelItem:
-        text: 'Auto_Measurement'
+        text: 'Measurement'
         BoxLayout:
             orientation: 'vertical'
             AnchorLayout:
@@ -69,3 +69,54 @@
     TabbedPanelItem:
         text: 'mapping'
         MapViewLayout:
+    TabbedPanelItem:
+        text: 'setting'
+        SettingLatLon:
+            BoxLayout:
+                orientation: 'horizontal'
+                BoxLayout:
+                    orientation: 'vertical'
+                    AnchorLayout:
+                        anchor_x:'center'
+                        anchor_y:'top'
+                        Label:
+                            text:'input Start lon and lat'
+                            font_size:30
+                    AnchorLayout:
+                        anchor_x:'center'
+                        anchor_y:'top'
+                        TextInput:
+                            id: start_tr
+                            text: '[35.681473, 139.757559]'
+                            size_hint:[0.4, 0.3]
+                    AnchorLayout:
+                        anchor_x:'center'
+                        anchor_y:'center'
+                        Button:
+                            text:'OK'
+                            size_hint:[0.4, 0.3]
+                            font_size:30
+                            on_press:root.buttonClicked_start()
+                BoxLayout:
+                    orientation: 'vertical'
+                    AnchorLayout:
+                        anchor_x:'center'
+                        anchor_y:'top'
+                        Label:
+                            text:'input End lon and lat'
+                            font_size:30
+                    AnchorLayout:
+                        anchor_x:'center'
+                        anchor_y:'top'
+                        TextInput:
+                            id: end_tr
+                            text: '[35.681473, 139.757559]'
+                            size_hint:[0.4, 0.3]
+                    AnchorLayout:
+                        anchor_x:'center'
+                        anchor_y:'center'
+                        Button:
+                            text:'OK'
+                            size_hint:[0.4, 0.3]
+                            font_size:30
+                            on_press:root.buttonClicked_end()
