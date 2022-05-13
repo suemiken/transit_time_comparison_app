@@ -19,7 +19,7 @@ Mysqlでは配列は直接使用できないためjson型を使用すること�
 間接的に配列を使用している。
 # Requirement
 
-![ログイン](transit_time_comparison_app/image/menu.jpg)
+![ログイン](image/menu.jpg)
 
 # Installation
 
