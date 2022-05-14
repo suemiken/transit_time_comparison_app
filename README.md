@@ -49,3 +49,8 @@ icloudのパスワード
 記録した物は以下の画面で確認できる。
 
 ![recoding List](https://user-images.githubusercontent.com/18396212/168415321-3a30faba-d092-46dc-ae69-a08b38a13245.jpg)
+
+mapviewの画面は将来的に指定したidの測定情報を地図上で表示できるようにしたい。
+
+測定した経路はconf_locaten.pyで描画することによって、視覚的にどのような経路をたどったか確認できる。ただし、道路情報はなく、背景は白紙である。
+
